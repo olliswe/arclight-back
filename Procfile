@@ -1,2 +1,2 @@
 release: python manage.py migrate --noinput
-web: gunicorn arlightbackend.wsgi --log-file -
+web: gunicorn arclightbackend.wsgi --log-file -
