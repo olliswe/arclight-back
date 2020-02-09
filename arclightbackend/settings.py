@@ -165,4 +165,10 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 
 
+WEB_URL = env("WEB_URL")
+
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+import django_heroku
+
+django_heroku.settings(locals())

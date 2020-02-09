@@ -131,7 +131,8 @@ def password_reset_token_created(
         "first_name": reset_password_token.user.userprofile.first_name,
         "last_name": reset_password_token.user.userprofile.last_name,
         "email": reset_password_token.user.email,
-        "reset_password_url": "{}?token={}".format(url, reset_password_token.key),
+        # "reset_password_url": "{}?token={}".format(url, reset_password_token.key),
+        "reset_password_url": "{}/{}".format(url, reset_password_token.key),
     }
 
     # render email text

@@ -4,6 +4,8 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from api.models import VideoUpload
 from django.utils.dateparse import parse_datetime
+from django.http import HttpResponseRedirect
+import urllib
 
 
 class FileUploadView(views.APIView):
@@ -19,3 +21,9 @@ class FileUploadView(views.APIView):
         VideoUpload.objects.create(file=file_obj, name=name, dob=dob_parsed.date())
         # do some stuff with uploaded file
         return Response(status=204)
+
+
+def password_reset_redirect(request, redirect_url):
+    scheme = urllib.parse.urlparse(redirect_url).scheme
+    HttpResponseRedirect.allowed_schemes.append(scheme)
+    return HttpResponseRedirect(redirect_url)
