@@ -1,20 +1,22 @@
-from django.shortcuts import render
 from rest_framework import views
-from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from api.models import VideoUpload
 from django.utils.dateparse import parse_datetime
 from django.http import HttpResponseRedirect
 import urllib
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.decorators import api_view, parser_classes
+
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    def enforce_csrf(self, request):
+        return  # To not perform the csrf check previously happening
 
 
 class FileUploadView(views.APIView):
-    parser_classes = (MultiPartParser,)
-
     def post(self, request, format=None):
-        print(request.POST)
-        print(request.FILES)
         file_obj = request.FILES["file"]
+        file_obj.content_type = "video/mp4"
         name = request.POST["name"]
         dob = request.POST["dob"]
         dob_parsed = parse_datetime(dob)
