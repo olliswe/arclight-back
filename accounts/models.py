@@ -18,6 +18,17 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 
+class Facility(models.Model):
+    facility_name = models.CharField(max_length=225, verbose_name="Facility Name")
+    facility_country = models.CharField(max_length=225, verbose_name="Facility Country")
+
+    def __str__(self):
+        return self.facility_name
+
+    class Meta:
+        verbose_name_plural = "Facilities"
+
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
         """
@@ -57,6 +68,9 @@ class User(AbstractBaseUser):
     active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False)  # a admin user; non super-user
     admin = models.BooleanField(default=False)  # a superuser
+    facility = models.OneToOneField(
+        Facility, on_delete=models.CASCADE, null=True, blank=True
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []  # Email & Password are required by default.
@@ -92,25 +106,6 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
 
-class UserProfile(models.Model):
-    first_name = models.CharField(
-        max_length=225, verbose_name="First Name", null=True, blank=True
-    )
-    last_name = models.CharField(
-        max_length=225, verbose_name="Last Name", null=True, blank=True
-    )
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.user.email
-
-    @receiver(post_save, sender=User)
-    def create_or_update_user_profile(sender, instance, created, **kwargs):
-        if created:
-            UserProfile.objects.create(user=instance)
-        instance.userprofile.save()
-
-
 @receiver(reset_password_token_created)
 def password_reset_token_created(
     sender, instance, reset_password_token, url, *args, **kwargs
@@ -128,8 +123,7 @@ def password_reset_token_created(
     # send an e-mail to the user
     context = {
         "current_user": reset_password_token.user,
-        "first_name": reset_password_token.user.userprofile.first_name,
-        "last_name": reset_password_token.user.userprofile.last_name,
+        "facility": reset_password_token.user.facility.facility_name,
         "email": reset_password_token.user.email,
         # "reset_password_url": "{}?token={}".format(url, reset_password_token.key),
         "reset_password_url": "{}/{}".format(url, reset_password_token.key),

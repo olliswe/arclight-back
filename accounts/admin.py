@@ -1,19 +1,11 @@
 from django.contrib import admin
-from .models import User, UserProfile
+from .models import User, Facility
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserAdminCreationForm, UserAdminChangeForm
 
 
-class UserProfileInline(admin.StackedInline):
-    model = UserProfile
-    can_delete = False
-    verbose_name_plural = "Profile"
-    fk_name = "user"
-
-
 class UserAdmin(BaseUserAdmin):
-    inlines = (UserProfileInline,)
     # The forms to add and change user instances
     form = UserAdminChangeForm
     add_form = UserAdminCreationForm
@@ -27,6 +19,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         ("Permissions", {"fields": ("admin", "staff", "active")}),
+        ("Facility", {"fields": ("facility",)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -38,15 +31,7 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 
-class CustomUserAdmin(UserAdmin):
-    inlines = (UserProfileInline,)
-
-    def get_inline_instances(self, request, obj=None):
-        if not obj:
-            return list()
-        return super(CustomUserAdmin, self).get_inline_instances(request, obj)
-
-
 admin.site.unregister(Group)
-admin.site.register(User, CustomUserAdmin)
+admin.site.register(User, UserAdmin)
+admin.site.register(Facility)
 admin.site.site_header = "ArcLight Administrator Panel"

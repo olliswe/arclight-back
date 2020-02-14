@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "storages",
     "rest_auth",
     "custom_packages.django_rest_passwordreset",
+    "graphene_django",
 ]
 
 MIDDLEWARE = [
@@ -156,6 +157,7 @@ AWS_S3_FILE_OVERWRITE = False
 
 AWS_DEFAULT_ACL = None
 
+GRAPHENE = {"SCHEMA": "arclightbackend.schema.schema"}
 
 WEB_URL = env("WEB_URL")
 

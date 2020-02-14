@@ -1,19 +1,19 @@
 from rest_framework import serializers
-from .models import User, UserProfile
+from .models import User, Facility
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
+class FacilitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfile
-        fields = ["first_name", "last_name"]
+        model = Facility
+        fields = ["facility_name"]
 
 
 class UserSerializer(serializers.ModelSerializer):
-    userprofile = UserProfileSerializer(many=False)
+    facility = FacilitySerializer(many=False)
 
     class Meta:
         model = User
-        fields = ("id", "email", "userprofile", "date_added", "password")
+        fields = ("id", "email", "facility", "date_added", "password")
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
