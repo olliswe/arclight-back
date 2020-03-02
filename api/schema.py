@@ -7,6 +7,8 @@ from accounts.models import Facility
 
 
 class PatientNode(DjangoObjectType):
+    some_property = graphene.String()
+
     class Meta:
         model = Patient
         filter_fields = {

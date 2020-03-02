@@ -27,7 +27,7 @@ class Patient(models.Model):
         Facility, on_delete=models.CASCADE, null=True, blank=True
     )
 
-    def get_age(self):
+    def age(self):
         return (date.today() - self.dob) // timedelta(days=365.2425)
 
     def __str__(self):

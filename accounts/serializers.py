@@ -5,7 +5,7 @@ from .models import User, Facility
 class FacilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Facility
-        fields = ["facility_name"]
+        fields = ["id", "facility_name"]
 
 
 class UserSerializer(serializers.ModelSerializer):
