@@ -10,6 +10,7 @@ from .serializers import PatientSerializer
 
 class FileUploadView(views.APIView):
     def post(self, request, format=None):
+        print(request.FILES)
         file_obj = request.FILES["file"]
         file_obj.content_type = "video/mp4"
         name = request.POST["name"]

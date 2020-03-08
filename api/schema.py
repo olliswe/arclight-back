@@ -1,31 +1,33 @@
 import graphene
-from graphene import relay
-from graphene_django import DjangoObjectType
-from graphene_django.filter import DjangoFilterConnectionField
+from graphene_django.types import DjangoObjectType
 from .models import Patient
-from accounts.models import Facility
+from graphene_django_extras.fields import DjangoFilterListField
 
 
-class PatientNode(DjangoObjectType):
-    some_property = graphene.String()
+class Patient(DjangoObjectType):
+    age = graphene.String(source="age")
 
     class Meta:
         model = Patient
         filter_fields = {
             "full_name": ["exact", "icontains"],
-            "uid": ["exact"],
             "facility__facility_name": ["exact", "icontains"],
         }
-        interfaces = (relay.Node,)
 
-    @classmethod
-    def get_queryset(cls, queryset, info):
-        if not info.context.user.is_authenticated:
-            return Patient.objects.none()
-        else:
-            return Patient.objects.filter(facility=info.context.user.facility)
+    # @classmethod
+    # def get_queryset(cls, queryset, info):
+    #     if not info.context.user.is_authenticated:
+    #         return Patient.objects.none()
+    #     else:
+    #         return Patient.objects.filter(facility=info.context.user.facility)
 
 
 class Query(graphene.ObjectType):
-    patient = relay.Node.Field(PatientNode)
-    my_patients = DjangoFilterConnectionField(PatientNode)
+    patient = graphene.Field(Patient, patient_id=graphene.String())
+    my_patients = DjangoFilterListField(Patient)
+
+    def resolve_patient(self, info, patient_id):
+        return Patient.objects.get(pk=patient_id)
+
+    def resolve_my_patients(self, info, **kwargs):
+        return Patient.objects.filter(facility=info.context.user.facility)

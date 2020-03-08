@@ -15,7 +15,6 @@ def upload_location_video(instance, filename):
 class Patient(models.Model):
     GENDER_OPTIONS = [("male", "Male"), ("female", "Female")]
     full_name = models.CharField(verbose_name="Patient Name", max_length=1000)
-    uid = models.CharField(verbose_name="Unique Identifier", max_length=50, unique=True)
     dob = models.DateField(verbose_name="Date of Birth")
     gender = models.CharField(
         verbose_name="Gender", choices=GENDER_OPTIONS, max_length=50
@@ -27,6 +26,7 @@ class Patient(models.Model):
         Facility, on_delete=models.CASCADE, null=True, blank=True
     )
 
+    @property
     def age(self):
         return (date.today() - self.dob) // timedelta(days=365.2425)
 
