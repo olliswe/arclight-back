@@ -13,7 +13,7 @@ def upload_location_video(instance, filename):
 
 
 class Patient(models.Model):
-    GENDER_OPTIONS = [("male", "Male"), ("female", "Female")]
+    GENDER_OPTIONS = [("Male", "Male"), ("Female", "Female")]
     full_name = models.CharField(verbose_name="Patient Name", max_length=1000)
     dob = models.DateField(verbose_name="Date of Birth")
     gender = models.CharField(
@@ -31,7 +31,7 @@ class Patient(models.Model):
         return (date.today() - self.dob) // timedelta(days=365.2425)
 
     def __str__(self):
-        return self.full_name + " (" + self.uid + ") "
+        return self.full_name
 
 
 class VideoUpload(models.Model):
