@@ -20,9 +20,7 @@ class Migration(migrations.Migration):
             model_name="videoupload",
             name="patient",
             field=models.ForeignKey(
-                default=10,
-                on_delete=django.db.models.deletion.CASCADE,
-                to="api.Patient",
+                default=2, on_delete=django.db.models.deletion.CASCADE, to="api.Patient"
             ),
             preserve_default=False,
         ),
