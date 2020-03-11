@@ -35,12 +35,10 @@ class Patient(models.Model):
 
 
 class VideoUpload(models.Model):
-    name = models.CharField(
-        verbose_name="Patient Name", max_length=1000, null=True, blank=True
-    )
-    dob = models.DateField(verbose_name="Date of Birth", null=True, blank=True)
     file = models.FileField(upload_to=upload_location_video)
     date_recorded = models.DateField(auto_now_add=True)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    comment = models.TextField(verbose_name="Comment", default="")
 
     def __str__(self):
-        return self.name + "   |  " + self.dob.strftime("%m/%d/%Y")
+        return self.patient.full_name + "   |  " + self.patient.dob.strftime("%m/%d/%Y")
