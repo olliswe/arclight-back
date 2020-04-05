@@ -1,11 +1,15 @@
 from rest_framework import views
 from rest_framework import viewsets
 from rest_framework.response import Response
-from api.models import VideoUpload, Patient
-from django.utils.dateparse import parse_datetime
+from rest_framework.decorators import api_view
+from api.models import VideoUpload, Patient, DoctorComment, ScreenerComment
 from django.http import HttpResponseRedirect
 import urllib
-from .serializers import PatientSerializer
+from .serializers import (
+    PatientSerializer,
+    DoctorCommentSerializer,
+    ScreenerCommentSerializer,
+)
 
 
 class FileUploadView(views.APIView):
@@ -26,7 +30,27 @@ class PatientViewSet(viewsets.ModelViewSet):
     serializer_class = PatientSerializer
 
 
+class DoctorCommentViewSet(viewsets.ModelViewSet):
+    http_method_names = ["post", "patch"]
+    queryset = DoctorComment.objects.all()
+    serializer_class = DoctorCommentSerializer
+
+
+class ScreenerCommentViewSet(viewsets.ModelViewSet):
+    http_method_names = ["post", "patch"]
+    queryset = ScreenerComment.objects.all()
+    serializer_class = ScreenerCommentSerializer
+
+
 def password_reset_redirect(request, redirect_url):
     scheme = urllib.parse.urlparse(redirect_url).scheme
     HttpResponseRedirect.allowed_schemes.append(scheme)
     return HttpResponseRedirect(redirect_url)
+
+
+@api_view(["PATCH"])
+def archiveVideo(request, id):
+    videoInstance = VideoUpload.objects.get(id=id)
+    videoInstance.screener_status = "archived"
+    videoInstance.save()
+    return Response("Success")
