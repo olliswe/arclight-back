@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "rest_auth",
     "custom_packages.django_rest_passwordreset",
     "graphene_django",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -61,7 +62,16 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
+
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3000",
+    "https://arclight-490d2.firebaseapp.com",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
 
 ROOT_URLCONF = "arclightbackend.urls"
 
@@ -162,6 +172,7 @@ GRAPHENE = {"SCHEMA": "arclightbackend.schema.schema"}
 WEB_URL = env("WEB_URL")
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
 
 import django_heroku
 
