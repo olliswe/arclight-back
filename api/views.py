@@ -17,10 +17,13 @@ class FileUploadView(views.APIView):
         print(request.FILES)
         file_obj = request.FILES["file"]
         file_obj.content_type = "video/mp4"
+        signature_obj = request.FILES["signature"]
         patient_id = request.POST["patient_id"]
         patient = Patient.objects.get(id=int(patient_id))
         comment = request.POST["comment"]
-        VideoUpload.objects.create(file=file_obj, patient=patient, comment=comment)
+        VideoUpload.objects.create(
+            file=file_obj, patient=patient, comment=comment, signature=signature_obj
+        )
         return Response(status=204)
 
 

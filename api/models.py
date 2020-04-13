@@ -1,14 +1,23 @@
 from django.db import models
-from django.utils.text import slugify
 from datetime import datetime
 from datetime import date, timedelta
 from accounts.models import Facility, User
+from django.utils.text import slugify
 
 
 def upload_location_video(instance, filename):
-    return "video_uploads/%s/%s" % (
-        datetime.now().strftime("%d%m%Y"),
-        filename.replace("MOV", "mp4"),
+    return "screenings/%s/Patient_ID_%s/%s_video.mp4" % (
+        slugify(instance.patient.facility.facility_name),
+        str(instance.patient.id),
+        datetime.now().strftime("%d%m%Y_%H%M"),
+    )
+
+
+def upload_location_image(instance, filename):
+    return "screenings/%s/Patient_ID_%s/%s_signature.png" % (
+        slugify(instance.patient.facility.facility_name),
+        str(instance.patient.id),
+        datetime.now().strftime("%d%m%Y_%H%M"),
     )
 
 
@@ -46,6 +55,7 @@ class VideoUpload(models.Model):
         ("archived", "Archived"),
     ]
     file = models.FileField(upload_to=upload_location_video)
+    signature = models.FileField(upload_to=upload_location_image, null=True)
     date_recorded = models.DateField(auto_now_add=True)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     comment = models.TextField(verbose_name="Comment", default="")
@@ -68,6 +78,10 @@ class VideoUpload(models.Model):
     @property
     def signed_url(self):
         return self.file.url
+
+    @property
+    def signed_signature_url(self):
+        return self.signature.url
 
     def __str__(self):
         return self.patient.full_name + "   |  " + self.patient.dob.strftime("%m/%d/%Y")
