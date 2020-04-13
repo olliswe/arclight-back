@@ -38,6 +38,7 @@ class PatientObjectType(DjangoObjectType):
 
 class VideoUploadObjectType(DjangoObjectType):
     signed_url = graphene.String(source="signed_url")
+    signed_signature_url = graphene.String(source="signed_signature_url")
 
     class Meta:
         model = VideoUpload
