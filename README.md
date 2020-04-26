@@ -14,7 +14,9 @@ The Arclight App is developed together with volunteers from the University of St
 6. Start django server `python manage.py runserver`
 
 The server is now running on `http://127.0.0.1:8000/`.
+
 The admin panel can be accessed at `http://127.0.0.1:8000/admin`.
+
 The graphql GUI can be accessed at `http://127.0.0.1:8000/graphql`.
 
 
@@ -37,12 +39,18 @@ Any custom Python packages are stored here
 ## Endpoints
 
 `/accounts/password_reset/*` Password reset urls
+
 `/acounts/users/` List of users
+
 `/accounts/current_user/` Get current user info
+
 `/accounts/api-toke-auth/` Get/create token
 
+
 `/api/upload_video/` Upload a new video screening
+
 `/api/password_reset_redirect/<path:redirect_url>/` Used for redirecting when users resets password on smartphone app
+
 `/api/archive_video/<int:id>/` Archiving a video
 
 
