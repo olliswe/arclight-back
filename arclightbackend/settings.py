@@ -185,8 +185,12 @@ if "RDS_DB_NAME" in os.environ:
     }
 else:
     DATABASES = {
-        "default": env.db(
-            "DATABASE_URL",
-            "pgsql://postgres:YOUR_PASSWORD_HERE@127.0.0.1:5432/arclight_dev",
-        )
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "arclight_dev",
+            "USER": "postgres",
+            "PASSWORD": env("LOCAL_DB_PASSWORD", "DEFAULT"),
+            "HOST": "127.0.0.1",
+            "PORT": "5432",
+        }
     }
