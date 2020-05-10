@@ -97,7 +97,7 @@ WSGI_APPLICATION = "arclightbackend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {"default": env.db("DATABASE_URL")}
+DATABASES = {"default": env.db("DATABASE_URL", "NO_DB")}
 
 
 EMAIL_HOST = env("EMAIL_HOST")
