@@ -97,13 +97,6 @@ WSGI_APPLICATION = "arclightbackend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    "default": env.db(
-        "DATABASE_URL",
-        "pgsql://postgres:YOUR_PASSWORD_HERE@127.0.0.1:5432/arclight_dev",
-    )
-}
-
 
 EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
@@ -189,4 +182,11 @@ if "RDS_DB_NAME" in os.environ:
             "HOST": os.environ["RDS_HOSTNAME"],
             "PORT": os.environ["RDS_PORT"],
         }
+    }
+else:
+    DATABASES = {
+        "default": env.db(
+            "DATABASE_URL",
+            "pgsql://postgres:YOUR_PASSWORD_HERE@127.0.0.1:5432/arclight_dev",
+        )
     }
