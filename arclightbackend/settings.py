@@ -36,6 +36,7 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "arclight.ngrok.io",
     "arclightapi-dev.us-east-2.elasticbeanstalk.com",
+    "*.oliveriyer.com",
 ]
 
 
